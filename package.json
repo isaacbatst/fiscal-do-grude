@@ -1,0 +1,6 @@
+{
+  "name": "telegram-must-not-be-named",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT"
+}

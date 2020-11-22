@@ -1,19 +1,25 @@
 import TelegramBot from 'node-telegram-bot-api';
-import sentSticker from './commands/sentSticker';
+import { SqlLiteDebtorsRepository } from './repositories/implementations/SqlLiteDebtorsRepository';
 
-const database = '../data.json';
-const TOKEN = `1313305857:AAHxdy8m4DNl7UlJgonqmEz0Lfbn1ZNj1SY`
+import { CreateDebtorController } from './useCases/CreateDebtor/CreateDebtorController';
+import { CreateDebtorUseCase } from './useCases/CreateDebtor/CreateDebtorUseCase';
+import { GetAllDebtorsUseCase } from './useCases/GetAllDebtors/GetAllDebtorsUseCase';
+import { GetAllDebtorsController } from './useCases/GetAllDebtors/GetAllDebtorsController';
 
-const bot = new TelegramBot(TOKEN, { polling: true })
+const TOKEN = `1313305857:AAHxdy8m4DNl7UlJgonqmEz0Lfbn1ZNj1SY`;
+const bot = new TelegramBot(TOKEN, { polling: true });
 
+const sqlLiteDebtorsRepository = new SqlLiteDebtorsRepository();
 
-sentSticker(bot, database);
+const createDebtorUseCase = new CreateDebtorUseCase(sqlLiteDebtorsRepository);
+const createDebtorController = new CreateDebtorController(createDebtorUseCase, bot);
+bot.onText(/\/entrar/, msg => createDebtorController.handle(msg));
 
-bot.onText(/\/falou_nome/, msg => {
-  console.log(msg)
+const getAllDebtorsUseCase = new GetAllDebtorsUseCase(sqlLiteDebtorsRepository);
+const getAllDebtorsController = new GetAllDebtorsController(getAllDebtorsUseCase, bot);
+bot.onText(/\/ver_o_povo/, msg => getAllDebtorsController.handle(msg))
+
+bot.onText(/vitor|victor/i, (msg) => {
   bot.sendMessage(msg.chat.id, 'shhhhh');
-})
+});
 
-bot.on("text", msg => {
-  console.log(msg)
-})

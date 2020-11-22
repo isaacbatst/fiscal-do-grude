@@ -7,7 +7,10 @@
     "dev": "tsnd src/index.ts --transpile-only --respawn --ignore-watch node_modules"
   },
   "dependencies": {
+    "@types/node-telegram-bot-api": "^0.50.4",
+    "knex": "^0.21.12",
     "node-telegram-bot-api": "^0.50.0",
+    "sqlite3": "^5.0.0",
     "uuidv4": "^6.2.5"
   },
   "devDependencies": {

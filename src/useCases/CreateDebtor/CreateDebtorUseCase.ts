@@ -4,7 +4,7 @@ import { ICreateDebtorRequestDTO } from "./CreateDebtorDTO";
 
 export class CreateDebtorUseCase {
   constructor(
-    private debtorsRepository: IDebtorsRepository
+    private debtorsRepository: IDebtorsRepository,
   ){}
 
   async execute(data: ICreateDebtorRequestDTO) {

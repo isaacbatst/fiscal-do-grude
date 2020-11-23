@@ -14,6 +14,6 @@ export class GetAllDebtorsController {
       return `${message}\n ${debtor.name}: ${debtor.owedAmount}`;
     }, '');
 
-    this.bot.sendMessage(msg.chat.id, sendingMessage);
+    this.bot.sendMessage(msg.chat.id, sendingMessage || 'Ainda não flagramos ninguém...');
   }
 }

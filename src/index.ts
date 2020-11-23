@@ -17,7 +17,7 @@ bot.onText(/\/entrar/, msg => createDebtorController.handle(msg));
 
 const getAllDebtorsUseCase = new GetAllDebtorsUseCase(sqlLiteDebtorsRepository);
 const getAllDebtorsController = new GetAllDebtorsController(getAllDebtorsUseCase, bot);
-bot.onText(/\/ver_o_povo/, msg => getAllDebtorsController.handle(msg))
+bot.onText(/\/listar_devedores/, msg => getAllDebtorsController.handle(msg))
 
 bot.onText(/vitor|victor/i, (msg) => {
   bot.sendMessage(msg.chat.id, 'shhhhh');

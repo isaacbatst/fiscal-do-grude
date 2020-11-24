@@ -11,7 +11,7 @@ export class CreateDebtorUseCase {
     const debtorAlreadyExists = await this.debtorsRepository.findByUsername(data.username);
 
     if(debtorAlreadyExists){
-      throw new Error('Debtor already exists.')
+      throw new Error('Já cadastrado :P')
     }
 
     const debtor = new Debtor(data);

@@ -5,7 +5,7 @@ declare module 'knex/types/tables' {
     id: string,
     name: string,
     username: string,
-    owedAmount: string,
+    owedAmount: number,
     created_at: string,
     updated_at: string
   }

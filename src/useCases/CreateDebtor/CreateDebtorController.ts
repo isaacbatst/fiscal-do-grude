@@ -14,17 +14,13 @@ export class CreateDebtorController {
       await this.createDebtorUseCase.execute({
         name,
         username,
-        owedAmount: (0).toLocaleString('pt-BR', {
-          minimumFractionDigits: 2,
-          style: 'currency',
-          currency: 'BRL'
-        })
+        owedAmount: 0
       })
 
       this.bot.sendMessage(msg.chat.id, 'Registrado, bbs ;*');
     } catch (err) {
-      this.bot.sendMessage(msg.chat.id, 'Hmmm, rolou não, se liga @isaacbatst')
-      this.bot.sendMessage(msg.chat.id, JSON.stringify(err))
+      this.bot.sendMessage(msg.chat.id, err.message )
+      this.bot.sendMessage(msg.chat.id, 'CC: @isaacbatst')
     }
   }
 }

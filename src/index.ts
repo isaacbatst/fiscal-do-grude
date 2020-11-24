@@ -1,4 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
+import dotenv from 'dotenv';
+
 import { SqlLiteDebtorsRepository } from './repositories/implementations/SqlLiteDebtorsRepository';
 
 import { CreateDebtorController } from './useCases/CreateDebtor/CreateDebtorController';
@@ -6,8 +8,9 @@ import { CreateDebtorUseCase } from './useCases/CreateDebtor/CreateDebtorUseCase
 import { GetAllDebtorsUseCase } from './useCases/GetAllDebtors/GetAllDebtorsUseCase';
 import { GetAllDebtorsController } from './useCases/GetAllDebtors/GetAllDebtorsController';
 
-const TOKEN = `1313305857:AAHxdy8m4DNl7UlJgonqmEz0Lfbn1ZNj1SY`;
-const bot = new TelegramBot(TOKEN, { polling: true });
+dotenv.config();
+
+const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
 const sqlLiteDebtorsRepository = new SqlLiteDebtorsRepository();
 

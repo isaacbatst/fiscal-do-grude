@@ -7,6 +7,8 @@ import { CreateDebtorController } from './useCases/CreateDebtor/CreateDebtorCont
 import { CreateDebtorUseCase } from './useCases/CreateDebtor/CreateDebtorUseCase';
 import { GetAllDebtorsUseCase } from './useCases/GetAllDebtors/GetAllDebtorsUseCase';
 import { GetAllDebtorsController } from './useCases/GetAllDebtors/GetAllDebtorsController';
+import { CatchWrongdoingUseCase } from './useCases/CatchWrongdoing/CatchWrongdoingUseCase';
+import { CatchWrongdoingController } from './useCases/CatchWrongdoing/CatchWrongdoingController';
 
 dotenv.config();
 
@@ -22,7 +24,7 @@ const getAllDebtorsUseCase = new GetAllDebtorsUseCase(sqlLiteDebtorsRepository);
 const getAllDebtorsController = new GetAllDebtorsController(getAllDebtorsUseCase, bot);
 bot.onText(/\/listar_devedores/, msg => getAllDebtorsController.handle(msg))
 
-bot.onText(/vitor|victor/i, (msg) => {
-  bot.sendMessage(msg.chat.id, 'shhhhh');
-});
+const catchWrongdoingUseCase = new CatchWrongdoingUseCase(sqlLiteDebtorsRepository);
+const catchWrongdoingController = new CatchWrongdoingController(catchWrongdoingUseCase, bot);
+bot.onText(/vitor|victor/i, msg => catchWrongdoingController.handle(msg));
 

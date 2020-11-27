@@ -30,7 +30,7 @@ Abra uma **issue** com sua sugestão ou um **PR** com sua contribuição!
   - `yarn dev`
 
 - Bot
-  - Crie seu bot de testes usando o **@BotFather** no próprio Telegram para gerar um Token ou entre em contato para usar o **@taxaDoGrudeBot**
+  - Crie seu bot de testes usando o **@BotFather** no próprio Telegram para gerar um Token e crie os comandos usados.
 
 - Banco de dados
   - Rode as *migrations* com `npx knex migrate:latest --env:development`

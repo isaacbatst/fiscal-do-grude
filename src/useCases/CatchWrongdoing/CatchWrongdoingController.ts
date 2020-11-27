@@ -8,8 +8,13 @@ export class CatchWrongdoingController {
   ) {}
 
   async handle(msg: Message) {
-    this.catchWrongdoingUseCase.execute();
+    try {
+      this.catchWrongdoingUseCase.execute(msg.from);
 
-    this.bot.sendMessage(msg.chat.id, 'Vou contar pra mãe...');
+      this.bot.sendMessage(msg.chat.id, 'Vou contar pra mãe...');
+    } catch (err) {
+      this.bot.sendMessage(msg.chat.id, err.message )
+      this.bot.sendMessage(msg.chat.id, 'CC: @isaacbatst')
+    }
   }
 }

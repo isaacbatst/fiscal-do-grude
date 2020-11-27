@@ -24,4 +24,12 @@ export class SqlLiteDebtorsRepository implements IDebtorsRepository {
     return await knex('debtors')
       .select('*');
   }
+
+  async incrementOwedAmount(id: string, updatedOwedAmount: number): Promise<void>{
+    await knex('debtors')
+      .where('id', id)
+      .update({
+        owedAmount: updatedOwedAmount
+      })
+  }
 }

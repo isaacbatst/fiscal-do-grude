@@ -23,11 +23,21 @@ export class CatchWrongdoingUseCase {
     })
     
     await this.debtorsRepository.save(debtor);
+
+    return {
+      debtor,
+      isNewDebtor: true,
+    }
   }
 
   async incrementOwedAmount(debtor: Debtor) {
-    const updatedOwedAmount = debtor.owedAmount + this.speakingAboutTax;
+    debtor.owedAmount = debtor.owedAmount + this.speakingAboutTax;
 
-    await this.debtorsRepository.incrementOwedAmount(debtor.id, updatedOwedAmount);
+    await this.debtorsRepository.incrementOwedAmount(debtor.id, debtor.owedAmount);
+    
+    return {
+      debtor,
+      isNewDebtor: false
+    }
   }
 }

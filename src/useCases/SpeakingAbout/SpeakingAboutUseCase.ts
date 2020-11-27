@@ -2,20 +2,24 @@ import { IDebtorsRepository } from "../../repositories/IDebtorsRepository";
 import { User } from "node-telegram-bot-api";
 import { Debtor } from "../../entities/Debtor";
 
-export class CatchWrongdoingUseCase {
+export class SpeakingAboutUseCase {
   private speakingAboutTax = 1;
 
   constructor(
     private debtorsRepository: IDebtorsRepository
   ){}
 
-  async execute({ username, first_name }: User){
-    const foundDebtor = await this.debtorsRepository.findByUsername(username);
+  async execute(user: User){
+    const foundDebtor = await this.debtorsRepository.findByUsername(user.username);
 
     if(foundDebtor) {
-      return this.incrementOwedAmount(foundDebtor)
+      return this.taxExistingDebtor(foundDebtor)
     }
 
+    return this.taxAndCreateNewDebtor(user)
+  }
+
+  async taxAndCreateNewDebtor({ username, first_name }: User) {
     const debtor = new Debtor({
       username,
       name: first_name,
@@ -30,7 +34,7 @@ export class CatchWrongdoingUseCase {
     }
   }
 
-  async incrementOwedAmount(debtor: Debtor) {
+  async taxExistingDebtor(debtor: Debtor) {
     debtor.owedAmount = debtor.owedAmount + this.speakingAboutTax;
 
     await this.debtorsRepository.incrementOwedAmount(debtor.id, debtor.owedAmount);

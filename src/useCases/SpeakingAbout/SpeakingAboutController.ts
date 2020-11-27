@@ -1,16 +1,16 @@
 import TelegramBot, { Message } from 'node-telegram-bot-api';
-import { CatchWrongdoingUseCase } from './CatchWrongdoingUseCase';
+import { SpeakingAboutUseCase } from './SpeakingAboutUseCase';
 import formatToReal from '../../helpers/formatToReal';
 
-export class CatchWrongdoingController {
+export class SpeakingAboutController {
   constructor(
-    private catchWrongdoingUseCase: CatchWrongdoingUseCase,
+    private speakingAboutUseCase: SpeakingAboutUseCase,
     private bot: TelegramBot
   ) {}
 
   async handle(msg: Message) {
     try {
-      const { debtor, isNewDebtor } = await this.catchWrongdoingUseCase.execute(msg.from);
+      const { debtor, isNewDebtor } = await this.speakingAboutUseCase.execute(msg.from);
 
       const formattedOwedAmount = formatToReal(debtor.owedAmount);
 

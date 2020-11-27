@@ -29,9 +29,24 @@ Abra uma **issue** com sua sugestão ou um **PR** com sua contribuição!
   - `yarn dev`
 
 - Bot
-  - Crie seu bot de testes usando o **@BotFather** no próprio Telegram para gerar um Token.
+  - Crie seu bot de testes usando o **@BotFather** no próprio Telegram para gerar um Token ou entre em contato para usar o **@taxaDoGrudeBot**
 
 - Banco de dados
   - Rode as *migrations* com `npx knex migrate:latest --env:development`
 
 Tá pronto o sorvetinho. 🍨
+
+#### A arquitetura
+
+Estou testando um padrão que separa os arquivos em *useCases*, baseado no que é visto [nesse video](https://youtu.be/vAV4Vy4jfkc "Qualquer semelhança é mera coincidência").
+
+Basicamente os casos de uso tem um 
+  - Controller: 
+    - trabalha diretamente com os inputs e os outputs
+  - UseCase: 
+    - executa a lógica entre a camada do Controller e os *providers* ou *repositories* que vierem a ser utilizados.
+    - recebe interfaces dos serviços utilizados, não se importanto com qual a implementação deles.
+  - Testes específicos
+  - Eventuais DTOs* - *Data transfer objects*, que definem estruturam que são passadas de uma camada para a outr*
+
+  **Estudando a necessidade*

@@ -31,6 +31,7 @@ Abra uma **issue** com sua sugestão ou um **PR** com sua contribuição!
 
 - Bot
   - Crie seu bot de testes usando o **@BotFather** no próprio Telegram para gerar um Token e crie os comandos usados.
+  - Nas configurações do bot, desativar o *Privacy Mode*
   
 - .env
   - Crie um `.env` baseado no `.env.example` e insira o token gerado no passo anterior

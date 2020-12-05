@@ -20,8 +20,7 @@ declare module 'knex/types/tables' {
   }
 
   interface Tables {
-    debtors: Debtor,
-    debtors_composite: Knex.CompositeTableType<
+    debtors: Knex.CompositeTableType<
       Debtor, 
       Omit<Debtor, "created_at" | "updated_at">,
       Partial<
@@ -29,8 +28,7 @@ declare module 'knex/types/tables' {
       >
     >,
 
-    occurences: Ocurrence,
-    occurence_composite: Knex.CompositeTableType<
+    occurences: Knex.CompositeTableType<
       Ocurrence,
       Omit<Ocurrence, "created_at" | "updated_at">,
       Partial<

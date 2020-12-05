@@ -13,7 +13,7 @@ export class SpeakingAboutUseCase {
     const foundDebtor = await this.debtorsRepository.findByUsername(user.username);
 
     if(foundDebtor) {
-      return this.taxExistingDebtor(foundDebtor)
+      return this.taxExistingDebtor(foundDebtor);
     }
 
     return this.taxAndCreateNewDebtor(user)

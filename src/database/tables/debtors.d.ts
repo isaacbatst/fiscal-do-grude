@@ -5,7 +5,16 @@ declare module 'knex/types/tables' {
     id: string,
     name: string,
     username: string,
-    owedAmount: number,
+    owed_amount: number,
+    created_at: string,
+    updated_at: string
+  }
+
+  interface Ocurrence {
+    id: string,
+    debtor_id: string,
+    message_id: string,
+    is_manual: boolean,
     created_at: string,
     updated_at: string
   }
@@ -15,7 +24,18 @@ declare module 'knex/types/tables' {
     debtors_composite: Knex.CompositeTableType<
       Debtor, 
       Omit<Debtor, "created_at" | "updated_at">,
-      Partial<Omit<Debtor, "id">>
+      Partial<
+        Omit<Debtor, "id" | "created_at" | "updated_at">
+      >
+    >,
+
+    occurences: Ocurrence,
+    occurence_composite: Knex.CompositeTableType<
+      Ocurrence,
+      Omit<Ocurrence, "created_at" | "updated_at">,
+      Partial<
+        Omit<Ocurrence, "id" | "created_at" | "updated_at">
+      >
     >
   }
 }

@@ -29,7 +29,7 @@ export class SqlLiteDebtorsRepository implements IDebtorsRepository {
     await knex('debtors')
       .where('id', id)
       .update({
-        owedAmount: updatedOwedAmount
+        owed_amount: updatedOwedAmount
       })
   }
 }

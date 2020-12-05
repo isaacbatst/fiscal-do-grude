@@ -7,7 +7,7 @@ export class Debtor {
 
   public name: string;
   public username: string;
-  public owedAmount: number;
+  public owed_amount: number;
 
   constructor(props: Omit<Debtor, 'id' | 'created_at' | 'updated_at' >, id?: string) {
     Object.assign(this, props);

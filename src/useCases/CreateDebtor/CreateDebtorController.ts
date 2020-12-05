@@ -14,13 +14,13 @@ export class CreateDebtorController {
       await this.createDebtorUseCase.execute({
         name,
         username,
-        owedAmount: 0
+        owed_amount: 0
       })
 
       this.bot.sendMessage(msg.chat.id, 'Registrado, bbs ;*');
     } catch (err) {
       this.bot.sendMessage(msg.chat.id, err.message )
-      this.bot.sendMessage(msg.chat.id, 'CC: @isaacbatst')
+      this.bot.sendMessage(msg.chat.id, 'cc: @isaacbatst')
     }
   }
 }

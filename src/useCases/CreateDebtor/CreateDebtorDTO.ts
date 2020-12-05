@@ -1,5 +1,5 @@
 export interface ICreateDebtorRequestDTO {
   name: string,
   username: string,
-  owedAmount: number
+  owed_amount: number
 }

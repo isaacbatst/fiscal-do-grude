@@ -12,7 +12,7 @@ export class SpeakingAboutController {
     try {
       const { debtor, isNewDebtor } = await this.speakingAboutUseCase.execute(msg.from);
 
-      const formattedOwedAmount = formatToReal(debtor.owedAmount);
+      const formattedOwedAmount = formatToReal(debtor.owed_amount);
 
       if(isNewDebtor){
         return this.bot.sendMessage(msg.chat.id, `@${debtor.username} entrou para a brincadeira! Tá devendo ${formattedOwedAmount} bb 🤑🤑`);

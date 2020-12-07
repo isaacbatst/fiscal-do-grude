@@ -45,14 +45,20 @@ export class ManualReportController {
   };
 
   editButtonsMessage(message: Message, from: User) {
+    
+
     this.bot.editMessageText(
-      `👮 Boa @${from.username}!! 🚨 *Responde essa mensagem* 🚨 marcando o meliante `,
+      `👮 Boa ${this.getUser(from)}!! 🚨 *Responde essa mensagem* 🚨 marcando o meliante `,
       {
         chat_id: message.chat.id,
         message_id: message.message_id,
         parse_mode: 'Markdown',
       }
     );
+  }
+
+  getUser(user: User){
+    return user.username ? `@${user.username}` : user.first_name
   }
 
   handleReply = async (reply: Message, message: Message, occurenceType: string) => {
@@ -97,13 +103,13 @@ export class ManualReportController {
     if (isNewDebtor) {
       return this.bot.sendMessage(
         message.chat.id,
-        `👮 Obrigado @${reply.from.username}, agora @${debtor.username} está nos nossos 📒 registros e devendo ${formattedOwedAmount} 🤑🤑`
+        `👮 Obrigado, ${this.getUser(reply.from)}, agora @${debtor.username} está nos nossos 📒 registros e devendo ${formattedOwedAmount} 🤑🤑`
       );
     }
 
     return this.bot.sendMessage(
       message.chat.id,
-      `👮 Obrigado @${reply.from.username}, agora @${debtor.username} tá devendo ${formattedOwedAmount} 🤑🤑`
+      `👮 Obrigado, ${this.getUser(reply.from)}, agora @${debtor.username} tá devendo ${formattedOwedAmount} 🤑🤑`
     );
   }
 

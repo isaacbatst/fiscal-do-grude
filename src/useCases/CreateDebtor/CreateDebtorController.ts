@@ -8,7 +8,7 @@ export class CreateDebtorController {
   ){}
   
   async handle(msg: Message) {
-    const { from: { first_name: name, username } } = msg;
+    const { from: { first_name: name, username = msg.from.first_name } } = msg;
 
     try {
       await this.createDebtorUseCase.execute({

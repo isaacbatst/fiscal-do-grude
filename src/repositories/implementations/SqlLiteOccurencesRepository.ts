@@ -1,11 +1,10 @@
 import { v4 as uuid } from 'uuid';
 import knex from '../../database/connection';
-import { Ocurrence } from 'knex/types/tables';
 import { Occurence } from '../../entities/Occurence';
 import { IOccurencesRepository } from "../IOccurencesRepository";
 
 export class SqlLiteOccurencesRepository implements IOccurencesRepository {
-  async findByMessageId(messageId: string): Promise<Occurence> {
+  async findByMessageId(messageId: number): Promise<Occurence> {
     return await knex
       .select("*")
       .from("occurences")
@@ -13,7 +12,7 @@ export class SqlLiteOccurencesRepository implements IOccurencesRepository {
       .first();
   }
 
-  async save(occurence: Ocurrence) {
+  async save(occurence: Occurence): Promise<void> {
     const id = uuid();
 
     await knex("occurences").insert({
@@ -22,7 +21,7 @@ export class SqlLiteOccurencesRepository implements IOccurencesRepository {
     })
   }
 
-  async getAll() {
+  async getAll(): Promise<Occurence[]> {
     return await knex
       .select("*")
       .from("occurences")

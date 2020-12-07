@@ -2,11 +2,11 @@ import * as Knex from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('occurrences', table => {
+  return knex.schema.createTable('occurences', table => {
     table.string('id').primary();
     table.string('debtor_id').unsigned().notNullable();
     table.foreign('debtor_id').references('debtors.id');
-    table.string('message_id').notNullable();
+    table.integer('message_id').notNullable();
     table.boolean('is_manual').notNullable();
     table.timestamps(false, true);
   })

@@ -6,7 +6,7 @@ export class Occurence {
   public readonly updated_at: string;
 
   public debtor_id: string;
-  public message_id: string;
+  public message_id: number;
   public is_manual: boolean;
 
   constructor(props: Omit<Occurence, 'id' | 'created_at' | 'updated_at' >, id?: string) {

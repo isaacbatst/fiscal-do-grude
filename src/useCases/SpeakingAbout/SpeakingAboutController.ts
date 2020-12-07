@@ -15,10 +15,10 @@ export class SpeakingAboutController {
       const formattedOwedAmount = formatToReal(debtor.owed_amount);
 
       if(isNewDebtor){
-        return this.bot.sendMessage(msg.chat.id, `@${debtor.username} entrou para a brincadeira! Tá devendo ${formattedOwedAmount} bb 🤑🤑`);
+        return this.bot.sendMessage(msg.chat.id, `👮 @${debtor.username} entrou para a brincadeira! Tá devendo ${formattedOwedAmount}, bb 🤑🤑`);
       }
 
-      return this.bot.sendMessage(msg.chat.id, `Boa, @${debtor.username}! tá humilde, ein? Agora tá devendo ${formattedOwedAmount} pro rolé 😅💸`)
+      return this.bot.sendMessage(msg.chat.id, `👮 Boa, @${debtor.username}! Agora tá devendo ${formattedOwedAmount} pro rolé 😅💸`)
     } catch (err) {
       this.bot.sendMessage(msg.chat.id, err.message )
       this.bot.sendMessage(msg.chat.id, 'CC: @isaacbatst')

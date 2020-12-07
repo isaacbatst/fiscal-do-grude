@@ -10,10 +10,10 @@ declare module 'knex/types/tables' {
     updated_at: string
   }
 
-  interface Ocurrence {
+  interface Occurence {
     id: string,
     debtor_id: string,
-    message_id: string,
+    message_id: number,
     is_manual: boolean,
     created_at: string,
     updated_at: string
@@ -29,10 +29,10 @@ declare module 'knex/types/tables' {
     >,
 
     occurences: Knex.CompositeTableType<
-      Ocurrence,
-      Omit<Ocurrence, "created_at" | "updated_at">,
+      Occurence,
+      Omit<Occurence, "created_at" | "updated_at">,
       Partial<
-        Omit<Ocurrence, "id" | "created_at" | "updated_at">
+        Omit<Occurence, "id" | "created_at" | "updated_at">
       >
     >
   }

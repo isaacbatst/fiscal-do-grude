@@ -10,10 +10,10 @@ export class SpeakingAboutUseCase {
   ){}
 
   async execute(user: User){
-    const foundDebtor = await this.debtorsRepository.findByUsername(user.username);
+    const debtor = await this.debtorsRepository.findByUsername(user.username);
 
-    if(foundDebtor) {
-      return this.taxExistingDebtor(foundDebtor);
+    if(debtor) {
+      return this.taxExistingDebtor(debtor);
     }
 
     return this.taxAndCreateNewDebtor(user)

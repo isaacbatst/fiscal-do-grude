@@ -21,7 +21,8 @@ export class ManualReportController {
       },
     });
 
-    this.bot.once('callback_query', this.handleCallbackQuery);
+    this.bot.off('callback_query', this.handleCallbackQuery);
+    this.bot.on('callback_query', this.handleCallbackQuery);
   }
 
   getOccurrenceTypesButtons() {

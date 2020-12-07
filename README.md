@@ -12,11 +12,12 @@ Inicialmente vamos fiscalizar o termo 'Victor|Vitor' e cobrar uma taxa fixa dos 
 - /delatar_coleguinha: registra manualmente ocorrencia
 
 ### Todos
-- Subir para um servidor
+- ~Subir para um servidor~
 - Criar action pra moer
 - Criar testes
 - ~Comandos para cobrar manualmente~
 - Tratar erros devidamente
+- Lidar com diferentes grupos
 
 ### Como ajudar
 

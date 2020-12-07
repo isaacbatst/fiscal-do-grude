@@ -15,7 +15,7 @@ Inicialmente vamos fiscalizar o termo 'Victor|Vitor' e cobrar uma taxa fixa dos 
 - Subir para um servidor
 - Criar action pra moer
 - Criar testes
-- Comandos para cobrar manualmente
+- ~Comandos para cobrar manualmente~
 - Tratar erros devidamente
 
 ### Como ajudar

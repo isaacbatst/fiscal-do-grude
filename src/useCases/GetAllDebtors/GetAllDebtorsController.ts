@@ -12,7 +12,7 @@ export class GetAllDebtorsController {
     const debtors = await this.getAllDebtorsUseCase.execute();
 
     const sendingMessage = debtors.reduce((message: string, debtor) => {
-      const formattedOwedAmount = formatToReal(debtor.owedAmount);
+      const formattedOwedAmount = formatToReal(debtor.owed_amount);
 
       return `${message}\n @${debtor.username}: ${formattedOwedAmount}`;
     }, '');

@@ -1,15 +1,15 @@
 import { v4 as uuid } from "uuid";
 
-export class Debtor {
+export class Occurence {
   public readonly id: string;
   public readonly created_at: string;
   public readonly updated_at: string;
 
-  public name: string;
-  public username: string;
-  public owed_amount: number;
+  public debtor_id: string;
+  public message_id: number;
+  public is_manual: boolean;
 
-  constructor(props: Omit<Debtor, 'id' | 'created_at' | 'updated_at' >, id?: string) {
+  constructor(props: Omit<Occurence, 'id' | 'created_at' | 'updated_at' >, id?: string) {
     Object.assign(this, props);
 
     if(!id) {

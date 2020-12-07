@@ -10,10 +10,10 @@ export class SpeakingAboutUseCase {
   ){}
 
   async execute(user: User){
-    const foundDebtor = await this.debtorsRepository.findByUsername(user.username);
+    const debtor = await this.debtorsRepository.findByUsername(user.username);
 
-    if(foundDebtor) {
-      return this.taxExistingDebtor(foundDebtor)
+    if(debtor) {
+      return this.taxExistingDebtor(debtor);
     }
 
     return this.taxAndCreateNewDebtor(user)
@@ -23,7 +23,7 @@ export class SpeakingAboutUseCase {
     const debtor = new Debtor({
       username,
       name: first_name,
-      owedAmount: this.speakingAboutTax
+      owed_amount: this.speakingAboutTax
     })
     
     await this.debtorsRepository.save(debtor);
@@ -35,9 +35,9 @@ export class SpeakingAboutUseCase {
   }
 
   async taxExistingDebtor(debtor: Debtor) {
-    debtor.owedAmount = debtor.owedAmount + this.speakingAboutTax;
+    debtor.owed_amount = debtor.owed_amount + this.speakingAboutTax;
 
-    await this.debtorsRepository.incrementOwedAmount(debtor.id, debtor.owedAmount);
+    await this.debtorsRepository.incrementOwedAmount(debtor.id, debtor.owed_amount);
     
     return {
       debtor,

@@ -9,6 +9,7 @@ Inicialmente vamos fiscalizar o termo 'Victor|Vitor' e cobrar uma taxa fixa dos 
 ### Comandos
 - /entrar: entrar manualmente na brincadeira
 - /listar_devedores: verificar quem e quanto estão devendo!
+- /delatar_coleguinha: registra manualmente ocorrencia
 
 ### Todos
 - Subir para um servidor

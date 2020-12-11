@@ -6,6 +6,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('id').primary();
     table.string('name').notNullable();
     table.string('token').notNullable();
+    table.decimal('total_owed')
     table.timestamps(false, true);
   })
 }

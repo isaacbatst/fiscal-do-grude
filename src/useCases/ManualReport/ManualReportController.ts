@@ -46,7 +46,6 @@ export class ManualReportController {
 
   editButtonsMessage(message: Message, from: User) {
     
-
     this.bot.editMessageText(
       `👮 Boa ${this.getUser(from)}!! 🚨 *Responde essa mensagem* 🚨 marcando o meliante `,
       {

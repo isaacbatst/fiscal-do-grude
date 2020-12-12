@@ -6,10 +6,9 @@ import { IOccurencesRepository } from "../IOccurencesRepository";
 export class SqlLiteOccurencesRepository implements IOccurencesRepository {
   async findByMessageId(messageId: number): Promise<Occurence> {
     return await knex
-      .select("*")
+      .first("*")
       .from("occurences")
       .where("message_id", messageId)
-      .first();
   }
 
   async save(occurence: Occurence): Promise<void> {

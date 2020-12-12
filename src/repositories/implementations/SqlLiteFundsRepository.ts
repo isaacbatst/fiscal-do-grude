@@ -6,9 +6,8 @@ import { IFundsRepository } from "../IFundsRepository";
 export class SqlLiteFundsRepository implements IFundsRepository {
   async findByToken(token: string): Promise<Fund>{
     return await knex('fund')
-      .select('*')
+      .first('*')
       .where('token', token)
-      .first();
   }
 
   async save(occurence: Fund): Promise<void> {

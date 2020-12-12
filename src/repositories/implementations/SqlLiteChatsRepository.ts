@@ -5,9 +5,8 @@ import { IChatsRepository } from "../IChatsRepository";
 export class SqlLiteChatsRepository implements IChatsRepository {
   async findById(id: string): Promise<Chat>{
     return await knex('chats')
-      .select('*')
+      .first('*')
       .where('id', id)
-      .first();
   }
 
   async save(chat: Chat): Promise<void>{

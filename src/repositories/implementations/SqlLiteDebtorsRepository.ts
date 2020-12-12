@@ -5,9 +5,8 @@ import { IDebtorsRepository } from "../IDebtorsRepository";
 export class SqlLiteDebtorsRepository implements IDebtorsRepository {
   async findByUsername(username: string): Promise<Debtor>{
     return await knex('debtors')
-      .select('*')
+      .first('*')
       .where('username', username)
-      .first();
   }
 
   async save(debtor: Debtor): Promise<void>{

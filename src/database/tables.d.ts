@@ -28,6 +28,13 @@ declare module 'knex/types/tables' {
     updated_at: string
   }
 
+  interface Group {
+    id: string,
+    id_fund: string,
+    created_at: string,
+    updated_at: string
+  }
+
   interface Tables {
     debtors: Knex.CompositeTableType<
       Debtor, 

@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import knex from '../../database/connection';
 import { Debtor } from "../../entities/Debtor";
 import { IDebtorsRepository } from "../IDebtorsRepository";
@@ -12,8 +11,6 @@ export class SqlLiteDebtorsRepository implements IDebtorsRepository {
   }
 
   async save(debtor: Debtor): Promise<void>{
-    const id = uuid();
-
     await knex('debtors').insert({
       ...debtor,
     });

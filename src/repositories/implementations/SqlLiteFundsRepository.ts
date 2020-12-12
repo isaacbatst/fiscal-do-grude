@@ -25,4 +25,12 @@ export class SqlLiteFundsRepository implements IFundsRepository {
       .select("*")
       .from("funds")
   }
+
+  async incrementTotalOwed(id: string, total_owed: number): Promise<void>{
+    await knex('funds')
+      .where('id', id)
+      .update({
+        total_owed
+      })
+  }
 }

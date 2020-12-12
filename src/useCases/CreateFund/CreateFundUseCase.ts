@@ -11,6 +11,10 @@ export class CreateFundUseCase {
   ){}
 
   async execute(data: ICreateFundRequestDTO) {
+    if(this.chatsRepository.findById(data.chat_id)){
+      throw new Error('A gente já tem um cadastro aqui...')
+    }
+
     const fund = new Fund({
       ...data,
       total_owed: 0
@@ -23,6 +27,5 @@ export class CreateFundUseCase {
     })
 
     await this.chatsRepository.save(chat);
-
   }
 }

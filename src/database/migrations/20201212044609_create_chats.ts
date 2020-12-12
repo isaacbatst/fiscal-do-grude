@@ -2,7 +2,7 @@ import * as Knex from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('groups', table => {
+  return knex.schema.createTable('chats', table => {
     table.string('id').primary();
     table.string('id_fund').unsigned().notNullable();
     table.foreign('id_fund').references('funds.id');
@@ -12,6 +12,6 @@ export async function up(knex: Knex): Promise<void> {
 
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable('groups');
+  return knex.schema.dropTable('chats');
 }
 

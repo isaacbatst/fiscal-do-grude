@@ -28,7 +28,7 @@ declare module 'knex/types/tables' {
     updated_at: string
   }
 
-  interface Group {
+  interface Chat {
     id: string,
     id_fund: string,
     created_at: string,

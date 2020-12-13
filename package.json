@@ -7,9 +7,9 @@
     "dev": "tsnd src/index.ts --transpile-only --respawn --ignore-watch node_modules"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
     "knex": "^0.21.12",
     "node-telegram-bot-api": "^0.50.0",
+    "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.0",
     "typeorm": "^0.2.29",

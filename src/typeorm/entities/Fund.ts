@@ -1,10 +1,34 @@
-import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+} from 'typeorm';
 import { Chat } from './Chat';
 import { Debtor } from './Debtor';
 import { FundsDebtors } from './FundsDebtors';
+import { v4 as uuid } from 'uuid';
 
 @Entity()
 export class Fund {
+  constructor(
+    props: Pick<Fund, 'chats' | 'name'> & Partial<Omit<Fund, 'chats' | 'name'>>
+  ) {
+    Object.assign(this, props);
+
+    if (!this.id) {
+      this.id = uuid();
+    }
+
+    if (!this.token) {
+      this.token = uuid();
+    }
+  }
+
   @PrimaryColumn()
   id: string;
 
@@ -18,7 +42,7 @@ export class Fund {
   })
   token: string;
 
-  @ManyToMany(() => Chat, chat => chat.id)
+  @ManyToMany(() => Chat, (chat) => chat.id)
   @JoinTable({
     name: 'funds_chats',
     joinColumn: {
@@ -26,29 +50,31 @@ export class Fund {
     },
     inverseJoinColumn: {
       name: 'id_chat',
-    }
+    },
   })
-  chats: Chat[]
+  chats: Chat[];
 
-  @ManyToMany(() => Debtor, debtor => debtor.id, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToMany(() => Debtor, (debtor) => debtor.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinTable({
     name: 'funds_debtors',
     joinColumn: {
       name: 'id_fund',
     },
     inverseJoinColumn: {
-      name: 'id_debtor'
-    }
+      name: 'id_debtor',
+    },
   })
-  debtors: Debtor[]
+  debtors: Debtor[];
 
-  @OneToMany(() => FundsDebtors, fundsDebtors => fundsDebtors.fund)
-  fundsDebtors: FundsDebtors[]
+  @OneToMany(() => FundsDebtors, (fundsDebtors) => fundsDebtors.fund)
+  fundsDebtors: FundsDebtors[];
 
   @CreateDateColumn()
-  created_at: Date
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: Date
+  updated_at: Date;
 }
-

@@ -1,5 +1,7 @@
 import bot from './telegram/bot';
 
+import 'reflect-metadata';
+
 import createDebtorController from './useCases/CreateDebtor';
 import createFundController from './useCases/CreateFund';
 import getAllDebtorsController from './useCases/GetAllDebtors';

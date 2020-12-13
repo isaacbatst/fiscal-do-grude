@@ -7,14 +7,17 @@
     "dev": "tsnd src/index.ts --transpile-only --respawn --ignore-watch node_modules"
   },
   "dependencies": {
-    "@types/node-telegram-bot-api": "^0.50.4",
     "dotenv": "^8.2.0",
     "knex": "^0.21.12",
     "node-telegram-bot-api": "^0.50.0",
+    "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.0",
+    "typeorm": "^0.2.29",
     "uuidv4": "^6.2.5"
   },
   "devDependencies": {
+    "@types/node": "^14.14.13",
+    "@types/node-telegram-bot-api": "^0.50.4",
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "ts-node-dev": "^1.0.0",

@@ -19,9 +19,25 @@ declare module 'knex/types/tables' {
     updated_at: string
   }
 
+  interface Fund {
+    id: string,
+    name: string,
+    token: string,
+    total_owed: number,
+    created_at: string,
+    updated_at: string
+  }
+
+  interface Chat {
+    id: string,
+    id_fund: string,
+    created_at: string,
+    updated_at: string
+  }
+
   interface Tables {
     debtors: Knex.CompositeTableType<
-      Debtor, 
+      Debtor,
       Omit<Debtor, "created_at" | "updated_at">,
       Partial<
         Omit<Debtor, "id" | "created_at" | "updated_at">
@@ -33,6 +49,22 @@ declare module 'knex/types/tables' {
       Omit<Occurence, "created_at" | "updated_at">,
       Partial<
         Omit<Occurence, "id" | "created_at" | "updated_at">
+      >
+    >
+
+    funds: Knex.CompositeTableType<
+      Fund,
+      Omit<Fund, "created_at" | "updated_at">,
+      Partial<
+        Omit<Fund, "id" | "created_at" | "updated_at">
+      >
+    >
+
+    chats: Knex.CompositeTableType<
+      Chat,
+      Omit<Chat, "created_at" | "updated_at">,
+      Partial<
+        Omit<Chat, "id" | "created_at" | "updated_at">
       >
     >
   }

@@ -27,6 +27,10 @@ export class Fund {
     if (!this.token) {
       this.token = uuid();
     }
+
+    if(!this.total_owed){
+      this.total_owed = 0;
+    }
   }
 
   @PrimaryColumn()
@@ -41,6 +45,13 @@ export class Fund {
     length: 100,
   })
   token: string;
+
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2
+  })
+  total_owed: number
 
   @ManyToMany(() => Chat, (chat) => chat.id)
   @JoinTable({

@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import knex from '../../database/connection';
-import { Occurence } from '../../entities/Occurence';
-import { IOccurencesRepository } from "../IOccurencesRepository";
+import knex from '../../../database/connection';
+import { Occurence } from '../../../entities/Occurence';
+import { IOccurencesRepository } from "../../IOccurencesRepository";
 
 export class SqlLiteOccurencesRepository implements IOccurencesRepository {
   async findByMessageId(messageId: number): Promise<Occurence> {

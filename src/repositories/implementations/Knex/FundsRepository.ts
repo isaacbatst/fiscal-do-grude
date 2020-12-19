@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import knex from '../../database/connection';
-import { Fund } from '../../entities/Fund';
-import { IFundsRepository } from "../IFundsRepository";
+import knex from '../../../database/connection';
+import { Fund } from '../../../entities/Fund';
+import { IFundsRepository } from "../../IFundsRepository";
 
 export class SqlLiteFundsRepository implements IFundsRepository {
   async findByToken(token: string): Promise<Fund>{

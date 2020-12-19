@@ -1,6 +1,6 @@
-import knex from '../../database/connection';
-import { Debtor } from "../../entities/Debtor";
-import { IDebtorsRepository } from "../IDebtorsRepository";
+import knex from '../../../database/connection';
+import { Debtor } from "../../../entities/Debtor";
+import { IDebtorsRepository } from "../../IDebtorsRepository";
 
 export class SqlLiteDebtorsRepository implements IDebtorsRepository {
   async findByUsername(username: string): Promise<Debtor>{

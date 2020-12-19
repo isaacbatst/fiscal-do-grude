@@ -1,6 +1,6 @@
-import knex from '../../database/connection';
-import { Chat } from "../../entities/Chat";
-import { IChatsRepository } from "../IChatsRepository";
+import knex from '../../../database/connection';
+import { Chat } from "../../../entities/Chat";
+import { IChatsRepository } from "../../IChatsRepository";
 
 export class SqlLiteChatsRepository implements IChatsRepository {
   async findById(id: string): Promise<Chat>{

@@ -1,7 +1,7 @@
 import bot from "../../telegram/bot";
 import { GetAllDebtorsUseCase } from "./GetAllDebtorsUseCase";
 import { GetAllDebtorsController } from "./GetAllDebtorsController";
-import { SqlLiteDebtorsRepository } from "../../repositories/implementations/SqlLiteDebtorsRepository";
+import { SqlLiteDebtorsRepository } from "../../repositories/implementations/Knex/DebtorsRepository";
 
 const sqlLiteDebtorsRepository = new SqlLiteDebtorsRepository();
 

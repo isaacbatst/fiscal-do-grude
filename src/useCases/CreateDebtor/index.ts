@@ -1,5 +1,5 @@
 import bot from "../../telegram/bot";
-import { SqlLiteDebtorsRepository } from "../../repositories/implementations/SqlLiteDebtorsRepository";
+import { SqlLiteDebtorsRepository } from "../../repositories/implementations/Knex/DebtorsRepository";
 import { CreateDebtorUseCase } from "./CreateDebtorUseCase";
 import { CreateDebtorController } from "./CreateDebtorController";
 

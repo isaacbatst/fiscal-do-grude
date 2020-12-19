@@ -1,8 +1,8 @@
 import bot from "../../telegram/bot";
-import { SqlLiteFundsRepository } from "../../repositories/implementations/SqlLiteFundsRepository";
+import { SqlLiteFundsRepository } from "../../repositories/implementations/Knex/FundsRepository";
+import { SqlLiteChatsRepository } from "../../repositories/implementations/Knex/ChatsRepository";
 import { CreateFundUseCase } from "./CreateFundUseCase";
 import { CreateFundController } from "./CreateFundController";
-import { SqlLiteChatsRepository } from "../../repositories/implementations/SqlLiteChatsRepository";
 
 const sqlLiteFundsRepository = new SqlLiteFundsRepository();
 const sqlLiteChatsRepository = new SqlLiteChatsRepository();

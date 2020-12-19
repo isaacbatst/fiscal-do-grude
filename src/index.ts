@@ -17,17 +17,3 @@ bot.onText(/\/delatar_coleguinha/, msg => manualIncrementController.handle(msg))
 bot.onText(/\/iniciar_vaquinha/, msg => createFundController.handle(msg));
 
 bot.on("polling_error", (msg) => console.log(msg));
-
-createConnection()
-.then(connection => {
-  const fundRepository = connection.getRepository(Fund);
-
-  const fund = new Fund({
-    name: 'name',
-    chats: []
-  })
-
-  fundRepository.save(fund)
-})
-  .catch(error => console.log(error));
-

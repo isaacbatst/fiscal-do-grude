@@ -2,9 +2,20 @@ import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, Many
 import { Chat } from './Chat';
 import { Fund } from './Fund';
 import { FundsDebtors } from './FundsDebtors';
+import { v4 as uuid } from 'uuid';
 
 @Entity()
 export class Debtor {
+  constructor(
+    props: Pick<Debtor, 'name' | 'username'> & Partial<Debtor>
+  ) {
+    Object.assign(this, props);
+
+    if (!this.id) {
+      this.id = uuid();
+    }
+  }
+
   @PrimaryColumn()
   id: string;
 

@@ -1,13 +1,13 @@
 import bot from "../../telegram/bot";
-import { SqlLiteFundsRepository } from "../../repositories/implementations/Knex/FundsRepository";
-import { SqlLiteChatsRepository } from "../../repositories/implementations/Knex/ChatsRepository";
 import { CreateFundUseCase } from "./CreateFundUseCase";
 import { CreateFundController } from "./CreateFundController";
+import { TypeOrmFundsRepository } from "../../repositories/implementations/FundsRepository";
+import { TypeOrmChatsRepository } from "../../repositories/implementations/ChatsRepository";
 
-const sqlLiteFundsRepository = new SqlLiteFundsRepository();
-const sqlLiteChatsRepository = new SqlLiteChatsRepository();
+const fundsRepository = new TypeOrmFundsRepository();
+const chatsRepository = new TypeOrmChatsRepository();
 
-const createFundUseCase = new CreateFundUseCase(sqlLiteFundsRepository, sqlLiteChatsRepository);
+const createFundUseCase = new CreateFundUseCase(fundsRepository, chatsRepository);
 const createFundController = new CreateFundController(createFundUseCase, bot);
 
 export default createFundController;

@@ -7,8 +7,6 @@ import createFundController from './useCases/CreateFund';
 import getAllDebtorsController from './useCases/GetAllDebtors';
 import manualIncrementController from './useCases/ManualReport';
 import speakingAboutController from './useCases/SpeakingAbout';
-import { createConnection } from 'typeorm';
-import { Fund } from './typeorm/entities/Fund';
 
 bot.onText(/\/vale_introsa/, msg => createDebtorController.handle(msg));
 bot.onText(/\/listar_devedores/, msg => getAllDebtorsController.handle(msg))

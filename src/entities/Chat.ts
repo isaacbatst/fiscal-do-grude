@@ -1,17 +1,27 @@
-import { v4 as uuid } from "uuid";
+import { Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
+import { Debtor } from './Debtor';
+import { Fund } from './Fund';
 
+@Entity()
 export class Chat {
-  public readonly id: string;
-  public readonly created_at: string;
-  public readonly updated_at: string;
-
-  public id_fund: string;
-
-  constructor(props: Omit<Chat, 'id' | 'created_at' | 'updated_at' >, id?: string) {
+  constructor(
+    props: Pick<Chat, 'id' | 'funds'> & Partial<Omit<Chat, 'id' | 'funds'>>
+  ) {
     Object.assign(this, props);
-
-    if(!id) {
-      this.id = uuid();
-    }
   }
+
+  @PrimaryColumn()
+  id: string;
+
+  @ManyToMany(() => Fund, fund => fund.id, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  funds: Fund[]
+
+  @ManyToMany(() => Debtor, debtor => debtor.id, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }
+

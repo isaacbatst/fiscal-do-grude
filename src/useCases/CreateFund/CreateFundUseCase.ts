@@ -17,13 +17,15 @@ export class CreateFundUseCase {
 
     const fund = new Fund({
       ...data,
+      chats: [],
       total_owed: 0
     });
 
     await this.fundsRepository.save(fund);
     
     const chat = new Chat({
-      id_fund: fund.id
+      id: data.chat_id,
+      funds: [fund],
     })
 
     await this.chatsRepository.save(chat);

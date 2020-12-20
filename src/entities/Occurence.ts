@@ -1,14 +1,8 @@
+import { Column, CreateDateColumn, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuid } from "uuid";
+import { Debtor } from "./Debtor";
 
 export class Occurence {
-  public readonly id: string;
-  public readonly created_at: string;
-  public readonly updated_at: string;
-
-  public debtor_id: string;
-  public message_id: number;
-  public is_manual: boolean;
-
   constructor(props: Omit<Occurence, 'id' | 'created_at' | 'updated_at' >, id?: string) {
     Object.assign(this, props);
 
@@ -16,4 +10,29 @@ export class Occurence {
       this.id = uuid();
     }
   }
+
+  @PrimaryColumn()
+  id: string;
+
+  @ManyToOne(() => Debtor)
+  @JoinColumn({
+    name: 'id_debtor'
+  })
+  debtor: Debtor;
+
+  @Column({
+    type: 'numeric',
+    precision: 12,
+    scale: 0
+  })
+  message_id: number;
+
+  @Column()
+  is_manual: boolean;
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }

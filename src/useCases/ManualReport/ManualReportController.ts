@@ -3,8 +3,12 @@ import TelegramBot, {
   Message,
   User,
 } from 'node-telegram-bot-api';
+import { Debtor } from '../../entities/Debtor';
 import formatToReal from '../../helpers/formatToReal';
-import { ManualReportUseCase } from './ManualReportUseCase';
+import {
+  ManualReportUseCase,
+  ManualReportUseCaseResponse,
+} from './ManualReportUseCase';
 
 export class ManualReportController {
   constructor(
@@ -12,27 +16,35 @@ export class ManualReportController {
     private bot: TelegramBot
   ) {}
 
-  handle(msg: Message) {
-    const occurenceTypesButtons = this.getOccurrenceTypesButtons();
+  async handle(message: Message) {
+    try {
+      const { fund } = await this.manualReportUseCase.executeHandleManualReport(message);
 
-    this.bot.sendMessage(msg.chat.id, 'Qual foi a ocorrência? 👮🚔', {
-      reply_markup: {
-        inline_keyboard: occurenceTypesButtons,
-      },
-    });
+      const occurenceTypesButtons = this.getOccurrenceTypesButtons();
 
-    this.bot.off('callback_query', this.handleCallbackQuery);
-    this.bot.on('callback_query', this.handleCallbackQuery);
+      this.bot.sendMessage(message.chat.id, 'Qual foi a ocorrência? 👮🚔', {
+        reply_markup: {
+          inline_keyboard: occurenceTypesButtons,
+        },
+      });
+
+      this.bot.off('callback_query', this.handleCallbackQuery);
+      this.bot.on('callback_query', this.handleCallbackQuery);
+    } catch (error) {
+      if(error instanceof ManualReportUseCaseResponse) {
+        this.handleError(error, message);
+      }
+    }
   }
 
-  getOccurrenceTypesButtons() {
+  private getOccurrenceTypesButtons() {
     return [
       [{ text: 'Falou o nome', callback_data: `spokeName` }],
       [{ text: 'Enviou figurinha', callback_data: `sentSticker` }],
     ];
   }
 
-  handleCallbackQuery = ({
+  private handleCallbackQuery = ({
     data: occurenceType,
     message,
     from,
@@ -44,10 +56,11 @@ export class ManualReportController {
     });
   };
 
-  editButtonsMessage(message: Message, from: User) {
-    
+  private editButtonsMessage(message: Message, from: User) {
     this.bot.editMessageText(
-      `👮 Boa ${this.getUser(from)}!! 🚨 *Responde essa mensagem* 🚨 marcando o meliante `,
+      `👮 Boa ${this.getUser(
+        from
+      )}!! 🚨 *Responde essa mensagem* 🚨 marcando o meliante `,
       {
         chat_id: message.chat.id,
         message_id: message.message_id,
@@ -56,63 +69,85 @@ export class ManualReportController {
     );
   }
 
-  getUser(user: User){
-    return user.username ? `@${user.username}` : user.first_name
+  private getUser(user: User) {
+    return user.username ? `@${user.username}` : user.first_name;
   }
 
-  handleReply = async (reply: Message, message: Message, occurenceType: string) => {
-    const words = reply.text.split(' ');
+  private handleReply = async (
+    reply: Message,
+    message: Message,
+    occurenceType: string
+  ) => {
+    try {
+      const response = await this.manualReportUseCase.executeHandleReply({
+        occurenceType,
+        message,
+        reply,
+      });
 
-    const usernameWithAt = words.find((word) => word.startsWith('@'));
-
-    const username = usernameWithAt.split('').slice(1).join('');
-
-    if (username) {
-      return this.taxAndSaveOccurence(username, message, reply, occurenceType);
+      return this.sendSuccessMessage(reply, response);
+    } catch (error) {
+      if (error instanceof ManualReportUseCaseResponse) {
+        this.handleError(error, message);
+      }
     }
-
-    this.sendNoMentionMessage(message);
   };
 
-  async taxAndSaveOccurence(
-    username: string,
-    message: Message,
-    reply: Message,
-    occurenceType: string
-  ) {
-    const {
-      alreadyRegistered,
-      debtor,
-      isNewDebtor,
-    } = await this.manualReportUseCase.execute({
-      username,
-      occurenceType,
-      message: message,
-    });
+  private handleError(error: ManualReportUseCaseResponse, message: Message) {
+    if (error.isUsernameInvalid) {
+      this.sendNoMentionMessage(message);
+    }
 
-    if (alreadyRegistered) {
+    if (error.isAlreadyRegistered) {
       return this.bot.sendMessage(
         message.chat.id,
         '👮 Já contabilizei 🧮 essa, obrigado 🙏 agente da lei'
       );
     }
+  }
 
-    const formattedOwedAmount = formatToReal(debtor.owed_amount);
+  private async sendSuccessMessage(
+    reply: Message,
+    { isNewDebtor, debtor }: ManualReportUseCaseResponse
+  ) {
+    const formattedOwedAmount = formatToReal(
+      debtor.fundsDebtors[0].owed_amount
+    );
 
     if (isNewDebtor) {
-      return this.bot.sendMessage(
-        message.chat.id,
-        `👮 Obrigado, ${this.getUser(reply.from)}, agora @${debtor.username} está nos nossos 📒 registros e devendo ${formattedOwedAmount} 🤑🤑`
-      );
+      return this.sendNewDebtorMessage(reply, debtor, formattedOwedAmount);
     }
 
-    return this.bot.sendMessage(
-      message.chat.id,
-      `👮 Obrigado, ${this.getUser(reply.from)}, agora @${debtor.username} tá devendo ${formattedOwedAmount} 🤑🤑`
+    this.sendOldDebtorMessage(reply, debtor, formattedOwedAmount);
+  }
+
+  private sendNewDebtorMessage(
+    reply: Message,
+    debtor: Debtor,
+    formattedOwedAmount: string
+  ) {
+    this.bot.sendMessage(
+      reply.chat.id,
+      `👮 Obrigado, ${this.getUser(reply.from)}, agora @${
+        debtor.username
+      } está nos nossos 📒 registros e devendo ${formattedOwedAmount} 🤑🤑`
     );
   }
 
-  sendNoMentionMessage(message: Message) {
+  private sendNoMentionMessage(message: Message) {
     this.bot.sendMessage(message.chat.id, 'Não entendi... 👮');
+  }
+
+  private sendOldDebtorMessage(
+    reply: Message,
+    debtor: Debtor,
+    formattedOwedAmount: string
+  ) {
+    return this.bot.sendMessage(
+      reply.chat.id,
+      `👮 Obrigado, ${this.getUser(reply.from)}, agora @${
+        debtor.username
+      } tá devendo ${formattedOwedAmount} 🤑🤑`
+    );
   }
 }

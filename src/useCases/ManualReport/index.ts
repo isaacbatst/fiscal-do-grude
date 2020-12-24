@@ -1,13 +1,15 @@
+import { TypeOrmDebtorsRepository } from "../../repositories/implementations/DebtorsRepository";
+import { TypeOrmChatsRepository } from "../../repositories/implementations/ChatsRepository";
+import { TypeOrmOccurencesRepository } from "../../repositories/implementations/OccurencesRepository";
 import bot from "../../telegram/bot";
-import { SqlLiteDebtorsRepository } from "../../repositories/implementations/Knex/DebtorsRepository";
-import { SqlLiteOccurencesRepository } from "../../repositories/implementations/Knex/OccurencesRepository";
 import { ManualReportController } from "./ManualReportController";
 import { ManualReportUseCase } from "./ManualReportUseCase";
 
-const sqlLiteDebtorsRepository = new SqlLiteDebtorsRepository();
-const sqlLiteOccurencesRepository = new SqlLiteOccurencesRepository()
+const debtorsRepository = new TypeOrmDebtorsRepository();
+const occurencesRepository = new TypeOrmOccurencesRepository();
+const chatsRepository = new TypeOrmChatsRepository()
 
-const manualReportUseCase = new ManualReportUseCase(sqlLiteDebtorsRepository, sqlLiteOccurencesRepository)
+const manualReportUseCase = new ManualReportUseCase(debtorsRepository, occurencesRepository, chatsRepository)
 const manualReportController = new ManualReportController(manualReportUseCase, bot);
 
 export default manualReportController;

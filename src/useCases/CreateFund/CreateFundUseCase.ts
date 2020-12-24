@@ -1,3 +1,4 @@
+import { createConnection } from "typeorm";
 import { Chat } from "../../entities/Chat";
 import { Fund } from "../../entities/Fund";
 import { IChatsRepository } from "../../repositories/IChatsRepository";
@@ -11,6 +12,8 @@ export class CreateFundUseCase {
   ){}
 
   async execute(data: ICreateFundRequestDTO) {
+    const connection = await createConnection();
+
     if(this.chatsRepository.findById(data.chat_id)){
       throw new Error('A gente já tem um cadastro aqui...')
     }

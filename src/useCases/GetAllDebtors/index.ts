@@ -1,11 +1,11 @@
 import bot from "../../telegram/bot";
 import { GetAllDebtorsUseCase } from "./GetAllDebtorsUseCase";
 import { GetAllDebtorsController } from "./GetAllDebtorsController";
-import { SqlLiteDebtorsRepository } from "../../repositories/implementations/Knex/DebtorsRepository";
+import { TypeOrmDebtorsRepository } from "../../repositories/implementations/DebtorsRepository";
 
-const sqlLiteDebtorsRepository = new SqlLiteDebtorsRepository();
+const typeOrmDebtorsRepository = new TypeOrmDebtorsRepository();
 
-const getAllDebtorsUseCase = new GetAllDebtorsUseCase(sqlLiteDebtorsRepository);
+const getAllDebtorsUseCase = new GetAllDebtorsUseCase(typeOrmDebtorsRepository);
 const getAllDebtorsController = new GetAllDebtorsController(getAllDebtorsUseCase, bot);
 
 export default getAllDebtorsController;

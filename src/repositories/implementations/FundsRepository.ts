@@ -1,13 +1,9 @@
-import { getRepository, Repository } from 'typeorm';
+import { Connection, getRepository, Repository } from 'typeorm';
 import { Fund } from '../../entities/Fund';
 import { IFundsRepository } from '../IFundsRepository';
 
-export class TypeOrmFundsRepository implements IFundsRepository {
+export class TypeOrmFundsRepository  implements IFundsRepository {
   private repository: Repository<Fund>;
-  
-  constructor(){
-    this.repository = getRepository(Fund);
-  }
 
   async findByToken(token: string) {
     return await this.repository.findOne({

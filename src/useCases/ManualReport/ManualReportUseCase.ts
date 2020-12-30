@@ -1,27 +1,34 @@
-import { Message, User } from 'node-telegram-bot-api';
+import { Message } from 'node-telegram-bot-api';
 import { Debtor } from '../../entities/Debtor';
 import { Occurence } from '../../entities/Occurence';
 import { IDebtorsRepository } from '../../repositories/IDebtorsRepository';
 import { IChatsRepository } from '../../repositories/IChatsRepository';
 import { IOccurencesRepository } from '../../repositories/IOccurencesRepository';
 import { IManualReportDTO } from './ManualReportDTO';
+import { Fund } from '../../entities/Fund';
+import { Chat } from '../../entities/Chat';
+import { FundsDebtors } from '../../entities/FundsDebtors';
 
 export class ManualReportUseCaseResponse {
-  constructor (props: ManualReportUseCaseResponse){
+  constructor(props: ManualReportUseCaseResponse) {
     Object.assign(this, props);
   }
 
   debtor?: Debtor;
   isNewDebtor?: Boolean;
   isUsernameInvalid?: Boolean;
-  isChatInvalid?:Boolean;
-  isAlreadyRegistered?: Boolean;
+  isChatInvalid?: Boolean;
+  isOldOccurence?: Boolean;
 }
+
 export class ManualReportUseCase {
   private taxes = {
     spokeName: 1,
     sentSticker: 0.25,
   };
+
+  private fund: Fund;
+  private chat: Chat;
 
   constructor(
     private debtorsRepository: IDebtorsRepository,
@@ -32,42 +39,49 @@ export class ManualReportUseCase {
   async executeHandleManualReport({ chat: { id } }: Message) {
     const chat = await this.chatsRepository.findById(id.toString());
 
-    if(!chat) {
-      throw new ManualReportUseCaseResponse ({
-         isChatInvalid: true
-      })
+    if (!chat) {
+      throw new ManualReportUseCaseResponse({
+        isChatInvalid: true,
+      });
     }
 
-    if(chat.funds.length === 1) {
+    if (chat.funds.length > 0) {
+      this.fund = chat.funds[0];
+      this.chat = chat;
+
       return {
-        fund: chat.funds[0]
+        fund: chat.funds[0],
       };
     }
 
-    throw new ManualReportUseCaseResponse ({
-      isChatInvalid: true
-   })
+    throw new ManualReportUseCaseResponse({
+      isChatInvalid: true,
+    });
   }
 
-  async executeHandleReply({ occurenceType, message, reply }: IManualReportDTO): Promise<ManualReportUseCaseResponse> {
+  async executeHandleReply({
+    occurenceType,
+    message,
+    reply,
+  }: IManualReportDTO): Promise<ManualReportUseCaseResponse> {
     try {
-      const username = this.validateUsername(reply);
+      const username = this.findUsername(reply);
 
       this.validateOccurence(message);
 
       return await this.taxDebtor({ occurenceType, message, reply }, username);
     } catch (error) {
-      return error
+      return error;
     }
   }
 
-  private validateUsername(reply: Message) {
+  private findUsername(reply: Message) {
     const words = reply.text.split(' ');
     const usernameWithAt = words.find((word) => word.startsWith('@'));
 
-    if(!usernameWithAt) {
+    if (!usernameWithAt) {
       throw {
-        isUsernameInvalid: false
+        isUsernameInvalid: false,
       };
     }
 
@@ -75,15 +89,15 @@ export class ManualReportUseCase {
 
     return username;
   }
-  
-  async validateOccurence(message: Message){
+
+  async validateOccurence(message: Message) {
     const occurence = await this.occurencesRepository.findByMessageId(
       message.message_id
     );
 
     if (occurence) {
       throw new ManualReportUseCaseResponse({
-        isAlreadyRegistered: true,
+        isOldOccurence: true,
       });
     }
   }
@@ -92,22 +106,29 @@ export class ManualReportUseCase {
     return await this.chatsRepository.findById(chat_id.toString());
   }
 
-  async taxDebtor({ reply, occurenceType, message }: IManualReportDTO, username: string) {
+  async taxDebtor(
+    { occurenceType, message }: IManualReportDTO,
+    username: string
+  ) {
     const debtor = await this.debtorsRepository.findByUsername(username);
 
     if (debtor) {
       await this.taxExistingDebtor(debtor, message, occurenceType);
 
       return {
-        isAlreadyRegistered: false,
+        isOldOccurence: false,
         debtor: debtor,
         isNewDebtor: false,
       };
     }
 
     return {
-      isAlreadyRegistered: false,
-      debtor: await this.taxAndCreateNewDebtor(username, message, occurenceType),
+      isOldOccurence: false,
+      debtor: await this.taxAndCreateNewDebtor(
+        username,
+        message,
+        occurenceType
+      ),
       isNewDebtor: true,
     };
   }
@@ -116,17 +137,19 @@ export class ManualReportUseCase {
     username: string,
     message: Message,
     occurenceType: string
-  ) { 
-    const owedAmount = this.taxes[occurenceType]
-
+  ) {
     const debtor = new Debtor({
       username,
       name: username,
-
+      chats: [this.chat],
+      funds: [this.fund],
     });
 
+    const owedAmount = this.taxes[occurenceType];
+
     await this.debtorsRepository.save(debtor);
-    await this.saveOccurence(debtor.id, message.message_id);
+    await this.debtorsRepository.incrementOwedAmount(debtor, this.fund, owedAmount)
+    await this.saveOccurence(debtor, message.message_id);
 
     return debtor;
   }
@@ -136,19 +159,22 @@ export class ManualReportUseCase {
     message: Message,
     occurenceType: string
   ) {
-    debtor.owed_amount = debtor.owed_amount + this.taxes[occurenceType];
+    const { owed_amount: oldOwedAmount } = debtor.fundsDebtors.find(fundDebtor => fundDebtor.fund.id === this.fund.id)
+
+    const owedAmount = oldOwedAmount + this.taxes[occurenceType]
 
     await this.debtorsRepository.incrementOwedAmount(
-      debtor.id,
-      debtor.owed_amount
+      debtor,
+      this.fund,
+      owedAmount
     );
 
-    await this.saveOccurence(debtor.id, message.message_id);
+    await this.saveOccurence(debtor, message.message_id);
   }
 
-  async saveOccurence(debtor_id: string, message_id: number) {
+  async saveOccurence(debtor: Debtor, message_id: number) {
     const occurence = new Occurence({
-      debtor_id,
+      debtor,
       message_id,
       is_manual: true,
     });

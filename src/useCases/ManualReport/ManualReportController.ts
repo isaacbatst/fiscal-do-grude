@@ -4,6 +4,7 @@ import TelegramBot, {
   User,
 } from 'node-telegram-bot-api';
 import { Debtor } from '../../entities/Debtor';
+import { Fund } from '../../entities/Fund';
 import formatToReal from '../../helpers/formatToReal';
 import {
   ManualReportUseCase,
@@ -18,9 +19,12 @@ export class ManualReportController {
 
   async handle(message: Message) {
     try {
-      const { fund } = await this.manualReportUseCase.executeHandleManualReport(message);
+      await this.manualReportUseCase.executeHandleManualReport(message);
 
-      const occurenceTypesButtons = this.getOccurrenceTypesButtons();
+      const occurenceTypesButtons = [
+        [{ text: 'Falou o nome', callback_data: `spokeName` }],
+        [{ text: 'Enviou figurinha', callback_data: `sentSticker` }],
+      ];
 
       this.bot.sendMessage(message.chat.id, 'Qual foi a ocorrência? 👮🚔', {
         reply_markup: {
@@ -31,17 +35,8 @@ export class ManualReportController {
       this.bot.off('callback_query', this.handleCallbackQuery);
       this.bot.on('callback_query', this.handleCallbackQuery);
     } catch (error) {
-      if(error instanceof ManualReportUseCaseResponse) {
-        this.handleError(error, message);
-      }
+      this.handleError(error, message);
     }
-  }
-
-  private getOccurrenceTypesButtons() {
-    return [
-      [{ text: 'Falou o nome', callback_data: `spokeName` }],
-      [{ text: 'Enviou figurinha', callback_data: `sentSticker` }],
-    ];
   }
 
   private handleCallbackQuery = ({
@@ -94,11 +89,19 @@ export class ManualReportController {
   };
 
   private handleError(error: ManualReportUseCaseResponse, message: Message) {
+    if (error instanceof ManualReportUseCaseResponse) {
+      return this.handleManualReportError(error, message)
+    }
+
+    console.log(error);
+  }
+
+  private handleManualReportError(error: ManualReportUseCaseResponse, message: Message) {
     if (error.isUsernameInvalid) {
       this.sendNoMentionMessage(message);
     }
 
-    if (error.isAlreadyRegistered) {
+    if (error.isOldOccurence) {
       return this.bot.sendMessage(
         message.chat.id,
         '👮 Já contabilizei 🧮 essa, obrigado 🙏 agente da lei'

@@ -1,14 +1,17 @@
 import { Connection, getRepository, Repository } from 'typeorm';
 import { Debtor } from '../../entities/Debtor';
+import { Fund } from '../../entities/Fund';
+import { FundsDebtors } from '../../entities/FundsDebtors';
 import { IDebtorsRepository } from '../IDebtorsRepository';
 
 export class TypeOrmDebtorsRepository implements IDebtorsRepository {
   private repository: Repository<Debtor>;
+  private fundsDebtorsRepository: Repository<FundsDebtors>;
 
   async findByUsername(username: string) {
     return await this.repository.findOne({
-      username
-    })
+      username,
+    });
   }
 
   async getAll() {
@@ -19,10 +22,11 @@ export class TypeOrmDebtorsRepository implements IDebtorsRepository {
     await this.repository.save(Debtor);
   }
 
-  async incrementOwedAmount(id: string, owedAmount: number) {
-    await this.repository.save({
-      id,
-      owed_amount: owedAmount
-    })
+  async incrementOwedAmount(debtor: Debtor, fund: Fund, owedAmount: number) {
+    await this.fundsDebtorsRepository.save({
+      debtor,
+      fund,
+      owed_amount: owedAmount,
+    });
   }
 }
